@@ -18,7 +18,8 @@
                 for (const k in dict_) {
                     const row = document.createElement('div');
                     const v = dict_[k];
-                    {'creator':'Creador'}.forEach((key,name) => {
+                    const args = {'creator':'Creador'};
+                    args.forEach((key,name) => {
                         const kv = document.createElement('p');
                         kv.innerHTML = `<b>${name}</b> ${v[key}`;
                         row.appendChild(kv);
@@ -30,5 +31,6 @@
                 console.error('Hubo un problema con la solicitud Fetch:', error);
             });
     });
+
   </script>
 </body>
