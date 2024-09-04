@@ -19,7 +19,7 @@
                 for (const k in data) {
                     const row = document.createElement('div');
                     const v = data[k];
-                    args.entries().forEach(([key,name]) => {
+                    Object.entries(args).forEach(([key,name]) => {
                         const kv = document.createElement('p');
                         kv.innerHTML = `<b>${name}</b> ${v[key]}`;
                         row.appendChild(kv);
