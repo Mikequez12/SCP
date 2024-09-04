@@ -3,7 +3,7 @@
   <div id='output'></div>
 
   <script>
-    const args = {'creator':'Creador'};  // Argumento clave del JSON que quieres mostrar
+    const args = {'creator': 'Creador'};  // Definir la clave del JSON que quieres mostrar
     var main_json_file = "https://raw.githubusercontent.com/scp-data/scp-api/main/docs/data/scp/items/content_archived.json";
 
     document.addEventListener('DOMContentLoaded', (main_event) => {
@@ -13,27 +13,31 @@
                 if (!response.ok) {
                     throw new Error('Error al cargar el archivo JSON');
                 }
-                return response.json(); // Convertir la respuesta en un objeto JSON
+                return response.json();  // Convertir la respuesta a JSON
             })
             .then(data => {
-                // Aquí puedes manipular los datos cargados
-                console.log(data);  // Para revisar cómo se ve el JSON en la consola
+                console.log("Datos recibidos:", data);  // Verificar la estructura del JSON en consola
+
                 const outputDiv = document.getElementById('output');
 
-                // Iterar sobre los elementos del JSON
+                // Dependiendo de la estructura del JSON, accederemos correctamente
                 for (const k in data) {
+                    // Cada `k` es una clave del objeto principal
                     const row = document.createElement('div');
-                    const v = data[k];
+                    const v = data[k];  // El valor asociado a la clave
 
-                    // Acceder a las claves especificadas en 'args'
-                    Object.entries(args).forEach(([key, name]) => {
-                        if (v[key] !== undefined) {  // Verificar si la clave existe
-                            const kv = document.createElement('p');
-                            kv.innerHTML = `<b>${name}:</b> ${v[key]}`;
-                            row.appendChild(kv);
-                        }
-                    });
+                    // Verificar si es un objeto dentro del JSON
+                    if (typeof v === 'object' && v !== null) {
+                        Object.entries(args).forEach(([key, name]) => {
+                            if (v.hasOwnProperty(key)) {  // Verificar si existe la clave
+                                const kv = document.createElement('p');
+                                kv.innerHTML = `<b>${name}:</b> ${v[key]}`;
+                                row.appendChild(kv);
+                            }
+                        });
+                    }
 
+                    // Añadir la fila al contenedor de salida
                     outputDiv.appendChild(row);
                 }
             })
