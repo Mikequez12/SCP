@@ -1,31 +1,39 @@
 <body>
   <h1 style='display:block;width:15%;border-bottom: solid 1px black;'>SCP</h1>
   <div id='output'></div>
+
   <script>
-    const args = {'creator':'Creador'};
-    var main_json_file = "https://raw.githubusercontent.com/scp-data/scp-api/main/docs/data/scp/items/content_archived.json"
+    const args = {'creator':'Creador'};  // Argumento clave del JSON que quieres mostrar
+    var main_json_file = "https://raw.githubusercontent.com/scp-data/scp-api/main/docs/data/scp/items/content_archived.json";
 
     document.addEventListener('DOMContentLoaded', (main_event) => {
+        // Cargar el JSON al cargar el DOM
         fetch(main_json_file)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error al cargar el archivo JSON');
-                };
-                console.log(response.json());
-                return response.json(); // Convertir a JSON
+                }
+                return response.json(); // Convertir la respuesta en un objeto JSON
             })
             .then(data => {
-                // Aquí puedes usar los datos cargados
-                console.log(data);
+                // Aquí puedes manipular los datos cargados
+                console.log(data);  // Para revisar cómo se ve el JSON en la consola
                 const outputDiv = document.getElementById('output');
+
+                // Iterar sobre los elementos del JSON
                 for (const k in data) {
                     const row = document.createElement('div');
                     const v = data[k];
-                    Object.entries(args).forEach(([key,name]) => {
-                        const kv = document.createElement('p');
-                        kv.innerHTML = `<b>${name}</b> ${v[key]}`;
-                        row.appendChild(kv);
+
+                    // Acceder a las claves especificadas en 'args'
+                    Object.entries(args).forEach(([key, name]) => {
+                        if (v[key] !== undefined) {  // Verificar si la clave existe
+                            const kv = document.createElement('p');
+                            kv.innerHTML = `<b>${name}:</b> ${v[key]}`;
+                            row.appendChild(kv);
+                        }
                     });
+
                     outputDiv.appendChild(row);
                 }
             })
@@ -33,6 +41,5 @@
                 console.error('Hubo un problema con la solicitud Fetch:', error);
             });
     });
-
   </script>
 </body>
