@@ -2,6 +2,7 @@
   <h1 style='display:block;width:15%;border-bottom: solid 1px black;'>SCP</h1>
   <div id='output'></div>
   <script>
+    const args = {'creator':'Creador'};
     var main_json_file = "https://raw.githubusercontent.com/scp-data/scp-api/main/docs/data/scp/items/content_archived.json"
 
     document.addEventListener('DOMContentLoaded', (main_event) => {
@@ -18,7 +19,6 @@
                 for (const k in dict_) {
                     const row = document.createElement('div');
                     const v = dict_[k];
-                    const args = {'creator':'Creador'};
                     args.forEach((key,name) => {
                         const kv = document.createElement('p');
                         kv.innerHTML = `<b>${name}</b> ${v[key}`;
