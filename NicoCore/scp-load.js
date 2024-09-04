@@ -11,11 +11,16 @@ document.addEventListener('DOMContentLoaded', (main_event) => {
         .then(data => {
             // Aquí puedes usar los datos cargados
             const outputDiv = document.getElementById('output');
-            outputDiv.innerHTML = `
-                <p>Nombre: ${data.name}</p>
-                <p>Edad: ${data.age}</p>
-                <p>Ciudad: ${data.city}</p>
-            `;
+            for (const k in dict_) {
+                const row = document.createElement('div');
+                const v = dict_[k];
+                {'creator':'Creador'}.forEach((key,name) => {
+                    const kv = document.createElement('p');
+                    kv.innerHTML = `<b>${name}</b> ${v[key}`;
+                    row.appendChild(kv);
+                };
+                outputDiv.appendChild(row);
+            }
         })
         .catch(error => {
             console.error('Hubo un problema con la solicitud Fetch:', error);
