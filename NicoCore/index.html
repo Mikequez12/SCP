@@ -11,7 +11,7 @@
                 if (!response.ok) {
                     throw new Error('Error al cargar el archivo JSON');
                 }
-                return response.json(); // Convertir a JSON
+                return response; // Convertir a JSON
             })
             .then(data => {
                 // Aquí puedes usar los datos cargados
