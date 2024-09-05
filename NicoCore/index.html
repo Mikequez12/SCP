@@ -1,5 +1,5 @@
 <head>
-  <title>Ver 1.4</title>
+  <title>Ver 1.3</title>
 </head>
 <body>
   <h1 style='display:block;width:15%;border-bottom: solid 1px black;'>SCP</h1>
@@ -11,17 +11,10 @@
     const main_json_file = "https://raw.githubusercontent.com/scp-data/scp-api/main/docs/data/scp/items/content_archived.json";
     let dataChunkSize = 50; // Number of items to display per chunk
     let currentIndex = 0;   // Keep track of where we are in the dataset
+    let data = [];          // Store the fetched data
 
     document.addEventListener('DOMContentLoaded', (main_event) => {
-        // Attach event listener to the "Load More" button to load more items
-        document.getElementById('loadMoreBtn').addEventListener('click', loadNextChunk);
-    });
-
-    // Function to fetch and load the next chunk of data
-    function loadNextChunk() {
-        const outputDiv = document.getElementById('output');
-        
-        // Fetch the data chunk from the JSON file
+        // Fetch the JSON when the DOM is loaded
         fetch(main_json_file)
             .then(response => {
                 if (!response.ok) {
@@ -30,38 +23,46 @@
                 return response.json();  // Convert response to JSON
             })
             .then(fetchedData => {
-                const dataArray = Object.values(fetchedData); // Convert object to array
-                
-                const endIndex = Math.min(currentIndex + dataChunkSize, dataArray.length); // Limit the end index
-                
-                for (let i = currentIndex; i < endIndex; i++) {
-                    const row = document.createElement('div');
-                    const item = dataArray[i];  // Each SCP item in the dataset
-
-                    // Check if it's an object and has the relevant key
-                    if (typeof item === 'object' && item !== null) {
-                        Object.entries(args).forEach(([key, name]) => {
-                            if (item.hasOwnProperty(key)) {  // Check if the key exists
-                                const kv = document.createElement('p');
-                                kv.innerHTML = `<b>${name}:</b> ${item[key]}`;
-                                row.appendChild(kv);
-                            }
-                        });
-                    }
-
-                    outputDiv.appendChild(row); // Append the row to the output div
-                }
-
-                currentIndex = endIndex; // Update the current index
-
-                // Hide the "Load More" button if we have loaded all the data
-                if (currentIndex >= dataArray.length) {
-                    document.getElementById('loadMoreBtn').style.display = 'none';
-                }
+                data = Object.values(fetchedData); // Store fetched data and convert it to an array
+                loadNextChunk(); // Initially load the first chunk of data
             })
             .catch(error => {
                 console.error('Hubo un problema con la solicitud Fetch:', error);
             });
+        
+        // Attach event listener to the "Load More" button to load more items
+        document.getElementById('loadMoreBtn').addEventListener('click', loadNextChunk);
+    });
+
+    // Function to load the next chunk of data
+    function loadNextChunk() {
+        const outputDiv = document.getElementById('output');
+        const endIndex = Math.min(currentIndex + dataChunkSize, data.length); // Limit the end index
+
+        for (let i = currentIndex; i < endIndex; i++) {
+            const row = document.createElement('div');
+            const item = data[i];  // Each SCP item in the dataset
+
+            // Check if it's an object and has the relevant key
+            if (typeof item === 'object' && item !== null) {
+                Object.entries(args).forEach(([key, name]) => {
+                    if (item.hasOwnProperty(key)) {  // Check if the key exists
+                        const kv = document.createElement('p');
+                        kv.innerHTML = <b>${name}:</b> ${item[key]};
+                        row.appendChild(kv);
+                    }
+                });
+            }
+
+            outputDiv.appendChild(row); // Append the row to the output div
+        }
+
+        currentIndex = endIndex; // Update the current index
+
+        // Hide the "Load More" button if we have loaded all the data
+        if (currentIndex >= data.length) {
+            document.getElementById('loadMoreBtn').style.display = 'none';
+        }
     }
   </script>
 </body>
