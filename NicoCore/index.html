@@ -48,7 +48,7 @@
                 Object.entries(args).forEach(([key, name]) => {
                     if (item.hasOwnProperty(key)) {  // Check if the key exists
                         const kv = document.createElement('p');
-                        kv.innerHTML = <b>${name}:</b> ${item[key]};
+                        kv.innerHTML = `<b>${name}:</b> ${item[key]}`;
                         row.appendChild(kv);
                     }
                 });
